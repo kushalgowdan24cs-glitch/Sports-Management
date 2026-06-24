@@ -3,10 +3,11 @@ import { createBrowserRouter } from 'react-router-dom';
 import { ROUTES } from '@/utils/constants';
 import { ProtectedRoute, PublicRoute } from '@/routes/ProtectedRoute';
 import { AdminLayout } from '@/layouts/AdminLayout';
+import { PlayerLayout } from '@/layouts/PlayerLayout';
 import { AuthLayout }  from '@/layouts/AuthLayout';
 import { PageLoader }  from '@/components/common/Spinner';
 
-// Lazy loaded pages
+// ─── Admin (Coach) pages ───────────────────────────────────────────────────
 const LoginPage         = lazy(() => import('@/pages/auth/LoginPage'));
 const DashboardPage     = lazy(() => import('@/pages/admin/DashboardPage'));
 const ProfilePage       = lazy(() => import('@/pages/admin/ProfilePage'));
@@ -20,6 +21,18 @@ const AchievementsPage  = lazy(() => import('@/pages/admin/achievements/Achievem
 const InjuriesPage      = lazy(() => import('@/pages/admin/injuries/InjuriesPage'));
 const NotificationsPage = lazy(() => import('@/pages/admin/notifications/NotificationsPage'));
 
+// ─── Player pages ──────────────────────────────────────────────────────────
+const PlayerDashboardPage  = lazy(() => import('@/pages/player/DashboardPage'));
+const PlayerProfilePage    = lazy(() => import('@/pages/player/ProfilePage'));
+const PlayerAttendancePage = lazy(() => import('@/pages/player/AttendancePage'));
+const PlayerPerformancePage= lazy(() => import('@/pages/player/PerformancePage'));
+const PlayerAnalyticsPage  = lazy(() => import('@/pages/player/AnalyticsPage'));
+const PlayerMatchesPage    = lazy(() => import('@/pages/player/MatchesPage'));
+const PlayerAchievementsPage=lazy(() => import('@/pages/player/AchievementsPage'));
+const PlayerFeedbackPage   = lazy(() => import('@/pages/player/FeedbackPage'));
+const PlayerInjuriesPage   = lazy(() => import('@/pages/player/InjuriesPage'));
+const PlayerSettingsPage   = lazy(() => import('@/pages/player/SettingsPage'));
+
 const withSuspense = (Component: React.LazyExoticComponent<React.FC>) => (
   <Suspense fallback={<PageLoader />}>
     <Component />
@@ -27,7 +40,7 @@ const withSuspense = (Component: React.LazyExoticComponent<React.FC>) => (
 );
 
 export const router = createBrowserRouter([
-  // Public routes (auth)
+  // ── Public routes (auth) ────────────────────────────────────────────────
   {
     element: <PublicRoute />,
     children: [
@@ -39,9 +52,10 @@ export const router = createBrowserRouter([
       },
     ],
   },
-  // Protected admin routes
+
+  // ── Protected Coach / Captain routes ────────────────────────────────────
   {
-    element: <ProtectedRoute />,
+    element: <ProtectedRoute allowedRoles={['COACH', 'CAPTAIN']} />,
     children: [
       {
         element: <AdminLayout />,
@@ -61,7 +75,45 @@ export const router = createBrowserRouter([
       },
     ],
   },
-  // Default redirect
-  { path: '/', element: <React.Fragment />, loader: () => { window.location.href = ROUTES.ADMIN.DASHBOARD; return null; } },
-  { path: '*', element: <div className="min-h-screen bg-dark-950 flex items-center justify-center"><div className="text-center"><h1 className="text-6xl font-bold text-gray-800 mb-4">404</h1><p className="text-gray-500 mb-4">Page not found</p><a href={ROUTES.ADMIN.DASHBOARD} className="text-primary-400 hover:underline">Go to Dashboard →</a></div></div> },
+
+  // ── Protected Player routes ─────────────────────────────────────────────
+  {
+    element: <ProtectedRoute allowedRoles={['PLAYER']} />,
+    children: [
+      {
+        element: <PlayerLayout />,
+        children: [
+          { path: ROUTES.PLAYER.DASHBOARD,    element: withSuspense(PlayerDashboardPage) },
+          { path: ROUTES.PLAYER.PROFILE,      element: withSuspense(PlayerProfilePage) },
+          { path: ROUTES.PLAYER.ATTENDANCE,   element: withSuspense(PlayerAttendancePage) },
+          { path: ROUTES.PLAYER.PERFORMANCE,  element: withSuspense(PlayerPerformancePage) },
+          { path: ROUTES.PLAYER.ANALYTICS,    element: withSuspense(PlayerAnalyticsPage) },
+          { path: ROUTES.PLAYER.MATCHES,      element: withSuspense(PlayerMatchesPage) },
+          { path: ROUTES.PLAYER.ACHIEVEMENTS, element: withSuspense(PlayerAchievementsPage) },
+          { path: ROUTES.PLAYER.FEEDBACK,     element: withSuspense(PlayerFeedbackPage) },
+          { path: ROUTES.PLAYER.INJURIES,     element: withSuspense(PlayerInjuriesPage) },
+          { path: ROUTES.PLAYER.SETTINGS,     element: withSuspense(PlayerSettingsPage) },
+        ],
+      },
+    ],
+  },
+
+  // ── Default redirect ────────────────────────────────────────────────────
+  {
+    path: '/',
+    element: <React.Fragment />,
+    loader: () => { window.location.href = ROUTES.LOGIN; return null; },
+  },
+  {
+    path: '*',
+    element: (
+      <div className="min-h-screen bg-dark-950 flex items-center justify-center">
+        <div className="text-center">
+          <h1 className="text-6xl font-bold text-gray-800 mb-4">404</h1>
+          <p className="text-gray-500 mb-4">Page not found</p>
+          <a href={ROUTES.LOGIN} className="text-primary-400 hover:underline">Go to Login →</a>
+        </div>
+      </div>
+    ),
+  },
 ]);
