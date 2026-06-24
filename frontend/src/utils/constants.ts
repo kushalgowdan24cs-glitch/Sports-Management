@@ -24,6 +24,19 @@ export const ROUTES = {
     INJURIES: '/admin/injuries',
     SETTINGS: '/admin/settings',
   },
+  PLAYER: {
+    ROOT: '/player',
+    DASHBOARD: '/player/dashboard',
+    PROFILE: '/player/profile',
+    ATTENDANCE: '/player/attendance',
+    PERFORMANCE: '/player/performance',
+    ANALYTICS: '/player/analytics',
+    MATCHES: '/player/matches',
+    ACHIEVEMENTS: '/player/achievements',
+    FEEDBACK: '/player/feedback',
+    INJURIES: '/player/injuries',
+    SETTINGS: '/player/settings',
+  },
 } as const;
 
 export const API_ENDPOINTS = {
