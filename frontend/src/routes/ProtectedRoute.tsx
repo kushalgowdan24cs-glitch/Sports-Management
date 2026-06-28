@@ -4,10 +4,11 @@ import { useSelector } from 'react-redux';
 import type { RootState } from '@/store';
 import { ROUTES } from '@/utils/constants';
 
-type Role = 'COACH' | 'CAPTAIN' | 'PLAYER';
+type Role = 'COACH' | 'CAPTAIN' | 'VICE_CAPTAIN' | 'PLAYER';
 
 function getDefaultRoute(role: Role | undefined): string {
-  if (role === 'PLAYER') return ROUTES.PLAYER.DASHBOARD;
+  if (role === 'PLAYER')        return ROUTES.PLAYER.DASHBOARD;
+  if (role === 'VICE_CAPTAIN')  return ROUTES.VICE_CAPTAIN.DASHBOARD;
   return ROUTES.ADMIN.DASHBOARD;
 }
 
