@@ -26,6 +26,21 @@ const MOCK_COACH = {
   updatedAt: new Date().toISOString(),
 };
 
+const MOCK_VICE_CAPTAIN = {
+  id: 'vc-1',
+  name: 'Rahul Verma',
+  email: 'vc@college.edu',
+  phone: '9876543200',
+  department: 'Computer Science',
+  designation: 'Vice Captain',
+  sportsHandled: ['Kabaddi'],
+  role: 'VICE_CAPTAIN' as const,
+  isActive: true,
+  collegeId: 'RV-CS-099',
+  createdAt: new Date().toISOString(),
+  updatedAt: new Date().toISOString(),
+};
+
 const MOCK_PLAYER = {
   id: 'player-1',
   name: 'Arjun Sharma',
@@ -52,7 +67,7 @@ const LoginPage: React.FC = () => {
     defaultValues: { email: '', password: '' },
   });
 
-  const doLogin = async (mockUser: typeof MOCK_COACH | typeof MOCK_PLAYER) => {
+  const doLogin = async (mockUser: typeof MOCK_COACH | typeof MOCK_PLAYER | typeof MOCK_VICE_CAPTAIN) => {
     setLoading(true);
     setError('');
     try {
@@ -62,7 +77,9 @@ const LoginPage: React.FC = () => {
         accessToken: `mock-access-token-${mockUser.role.toLowerCase()}`,
         refreshToken: `mock-refresh-token-${mockUser.role.toLowerCase()}`,
       }));
-      navigate(mockUser.role === 'PLAYER' ? ROUTES.PLAYER.DASHBOARD : ROUTES.ADMIN.DASHBOARD);
+      if (mockUser.role === 'PLAYER') navigate(ROUTES.PLAYER.DASHBOARD);
+      else if (mockUser.role === 'VICE_CAPTAIN') navigate(ROUTES.VICE_CAPTAIN.DASHBOARD);
+      else navigate(ROUTES.ADMIN.DASHBOARD);
     } catch {
       setError('Login failed. Please try again.');
     } finally {
@@ -73,13 +90,15 @@ const LoginPage: React.FC = () => {
   const onSubmit = async (data: LoginRequest) => {
     if (data.email === MOCK_PLAYER.email) {
       await doLogin(MOCK_PLAYER);
+    } else if (data.email === MOCK_VICE_CAPTAIN.email) {
+      await doLogin(MOCK_VICE_CAPTAIN);
     } else {
       await doLogin(MOCK_COACH);
     }
   };
 
-  const quickLogin = async (role: 'COACH' | 'PLAYER') => {
-    const user = role === 'PLAYER' ? MOCK_PLAYER : MOCK_COACH;
+  const quickLogin = async (role: 'COACH' | 'PLAYER' | 'VICE_CAPTAIN') => {
+    const user = role === 'PLAYER' ? MOCK_PLAYER : role === 'VICE_CAPTAIN' ? MOCK_VICE_CAPTAIN : MOCK_COACH;
     setValue('email', user.email);
     setValue('password', 'password123');
     await doLogin(user);
@@ -101,21 +120,34 @@ const LoginPage: React.FC = () => {
         <p className="text-xs text-gray-500 text-center mb-2 flex items-center justify-center gap-1.5">
           <Zap size={11} className="text-amber-400" /> Quick Login Presets
         </p>
-        <div className="grid grid-cols-2 gap-2">
+        <div className="grid grid-cols-3 gap-2">
           <button
             type="button"
             onClick={() => quickLogin('COACH')}
             disabled={loading}
+            id="quick-login-coach"
             className="flex flex-col items-center gap-1 px-3 py-2.5 rounded-xl bg-primary-500/10 border border-primary-500/25
                        text-xs font-medium text-primary-300 hover:bg-primary-500/20 transition-all disabled:opacity-50"
           >
-            <span className="text-base">🏅</span>
-            <span>Coach / Admin</span>
+            <span className="text-base">👨🏻‍🏫</span>
+            <span>Coach</span>
+          </button>
+          <button
+            type="button"
+            onClick={() => quickLogin('VICE_CAPTAIN')}
+            disabled={loading}
+            id="quick-login-vice-captain"
+            className="flex flex-col items-center gap-1 px-3 py-2.5 rounded-xl bg-violet-500/10 border border-violet-500/25
+                       text-xs font-medium text-violet-300 hover:bg-violet-500/20 transition-all disabled:opacity-50"
+          >
+            <span className="text-base">🎖️</span>
+            <span>Vice Captain</span>
           </button>
           <button
             type="button"
             onClick={() => quickLogin('PLAYER')}
             disabled={loading}
+            id="quick-login-player"
             className="flex flex-col items-center gap-1 px-3 py-2.5 rounded-xl bg-emerald-500/10 border border-emerald-500/25
                        text-xs font-medium text-emerald-300 hover:bg-emerald-500/20 transition-all disabled:opacity-50"
           >
@@ -143,7 +175,7 @@ const LoginPage: React.FC = () => {
         <Input
           label="Email"
           type="email"
-          placeholder="coach@college.edu or player@college.edu"
+          placeholder="coach@college.edu / vc@college.edu / player@college.edu"
           required
           id="login-email"
           autoComplete="email"

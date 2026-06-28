@@ -4,6 +4,7 @@ import { ROUTES } from '@/utils/constants';
 import { ProtectedRoute, PublicRoute } from '@/routes/ProtectedRoute';
 import { AdminLayout } from '@/layouts/AdminLayout';
 import { PlayerLayout } from '@/layouts/PlayerLayout';
+import { ViceCaptainLayout } from '@/layouts/ViceCaptainLayout';
 import { AuthLayout }  from '@/layouts/AuthLayout';
 import { PageLoader }  from '@/components/common/Spinner';
 
@@ -32,6 +33,19 @@ const PlayerAchievementsPage=lazy(() => import('@/pages/player/AchievementsPage'
 const PlayerFeedbackPage   = lazy(() => import('@/pages/player/FeedbackPage'));
 const PlayerInjuriesPage   = lazy(() => import('@/pages/player/InjuriesPage'));
 const PlayerSettingsPage   = lazy(() => import('@/pages/player/SettingsPage'));
+
+// ─── Vice Captain pages ────────────────────────────────────────────────────
+const VCDashboardPage     = lazy(() => import('@/pages/vice-captain/DashboardPage'));
+const VCProfilePage       = lazy(() => import('@/pages/vice-captain/ProfilePage'));
+const VCAttendancePage    = lazy(() => import('@/pages/vice-captain/AttendancePage'));
+const VCPlayersPage       = lazy(() => import('@/pages/vice-captain/PlayersPage'));
+const VCPerformancePage   = lazy(() => import('@/pages/vice-captain/PerformancePage'));
+const VCAnalyticsPage     = lazy(() => import('@/pages/vice-captain/AnalyticsPage'));
+const VCMatchesPage       = lazy(() => import('@/pages/vice-captain/MatchesPage'));
+const VCAnnouncementsPage = lazy(() => import('@/pages/vice-captain/AnnouncementsPage'));
+const VCReportsPage       = lazy(() => import('@/pages/vice-captain/ReportsPage'));
+const VCInjuriesPage      = lazy(() => import('@/pages/vice-captain/InjuriesPage'));
+const VCSettingsPage      = lazy(() => import('@/pages/vice-captain/SettingsPage'));
 
 const withSuspense = (Component: React.LazyExoticComponent<React.FC>) => (
   <Suspense fallback={<PageLoader />}>
@@ -93,6 +107,29 @@ export const router = createBrowserRouter([
           { path: ROUTES.PLAYER.FEEDBACK,     element: withSuspense(PlayerFeedbackPage) },
           { path: ROUTES.PLAYER.INJURIES,     element: withSuspense(PlayerInjuriesPage) },
           { path: ROUTES.PLAYER.SETTINGS,     element: withSuspense(PlayerSettingsPage) },
+        ],
+      },
+    ],
+  },
+
+  // ── Protected Vice Captain routes ────────────────────────────────────────
+  {
+    element: <ProtectedRoute allowedRoles={['VICE_CAPTAIN']} />,
+    children: [
+      {
+        element: <ViceCaptainLayout />,
+        children: [
+          { path: ROUTES.VICE_CAPTAIN.DASHBOARD,     element: withSuspense(VCDashboardPage) },
+          { path: ROUTES.VICE_CAPTAIN.PROFILE,       element: withSuspense(VCProfilePage) },
+          { path: ROUTES.VICE_CAPTAIN.ATTENDANCE,    element: withSuspense(VCAttendancePage) },
+          { path: ROUTES.VICE_CAPTAIN.PLAYERS,       element: withSuspense(VCPlayersPage) },
+          { path: ROUTES.VICE_CAPTAIN.PERFORMANCE,   element: withSuspense(VCPerformancePage) },
+          { path: ROUTES.VICE_CAPTAIN.ANALYTICS,     element: withSuspense(VCAnalyticsPage) },
+          { path: ROUTES.VICE_CAPTAIN.MATCHES,       element: withSuspense(VCMatchesPage) },
+          { path: ROUTES.VICE_CAPTAIN.ANNOUNCEMENTS, element: withSuspense(VCAnnouncementsPage) },
+          { path: ROUTES.VICE_CAPTAIN.REPORTS,       element: withSuspense(VCReportsPage) },
+          { path: ROUTES.VICE_CAPTAIN.INJURIES,      element: withSuspense(VCInjuriesPage) },
+          { path: ROUTES.VICE_CAPTAIN.SETTINGS,      element: withSuspense(VCSettingsPage) },
         ],
       },
     ],

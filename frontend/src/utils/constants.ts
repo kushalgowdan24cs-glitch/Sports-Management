@@ -3,6 +3,7 @@ export const APP_NAME = 'Sports Management System';
 export const ROLES = {
   COACH: 'COACH',
   CAPTAIN: 'CAPTAIN',
+  VICE_CAPTAIN: 'VICE_CAPTAIN',
   PLAYER: 'PLAYER',
 } as const;
 
@@ -36,6 +37,20 @@ export const ROUTES = {
     FEEDBACK: '/player/feedback',
     INJURIES: '/player/injuries',
     SETTINGS: '/player/settings',
+  },
+  VICE_CAPTAIN: {
+    ROOT: '/vc',
+    DASHBOARD: '/vc/dashboard',
+    PROFILE: '/vc/profile',
+    ATTENDANCE: '/vc/attendance',
+    PLAYERS: '/vc/players',
+    PERFORMANCE: '/vc/performance',
+    ANALYTICS: '/vc/analytics',
+    MATCHES: '/vc/matches',
+    ANNOUNCEMENTS: '/vc/announcements',
+    REPORTS: '/vc/reports',
+    INJURIES: '/vc/injuries',
+    SETTINGS: '/vc/settings',
   },
 } as const;
 
