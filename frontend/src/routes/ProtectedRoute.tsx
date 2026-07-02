@@ -9,6 +9,7 @@ type Role = 'COACH' | 'CAPTAIN' | 'VICE_CAPTAIN' | 'PLAYER';
 function getDefaultRoute(role: Role | undefined): string {
   if (role === 'PLAYER')        return ROUTES.PLAYER.DASHBOARD;
   if (role === 'VICE_CAPTAIN')  return ROUTES.VICE_CAPTAIN.DASHBOARD;
+  if (role === 'CAPTAIN')       return ROUTES.CAPTAIN.DASHBOARD;
   return ROUTES.ADMIN.DASHBOARD;
 }
 
