@@ -52,6 +52,19 @@ export const ROUTES = {
     INJURIES: '/vc/injuries',
     SETTINGS: '/vc/settings',
   },
+  CAPTAIN: {
+    ROOT: '/captain',
+    DASHBOARD: '/captain/dashboard',
+    PROFILE: '/captain/profile',
+    ATTENDANCE: '/captain/attendance',
+    PERFORMANCE: '/captain/performance',
+    ANALYTICS: '/captain/analytics',
+    PLAYERS: '/captain/players',
+    MATCHES: '/captain/matches',
+    ANNOUNCEMENTS: '/captain/announcements',
+    FEEDBACK: '/captain/feedback',
+    SETTINGS: '/captain/settings',
+  },
 } as const;
 
 export const API_ENDPOINTS = {
